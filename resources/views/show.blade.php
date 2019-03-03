@@ -27,14 +27,11 @@
             type:'GET',
             url:"{{ url('api/users') }}",
             success:function(data) {
-               $('.container').html(data.html);
                 var trHTML = '';
                 $.each(data, function (i, item) {
-                    // console.log(data.links.prev);
+
                     $.each(item, function (j, user_data) {
-                        if (user_data != 'undefined') {
-                            console.log(user_data.id);
-                        }
+
 
                         trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td></tr>';
                     });

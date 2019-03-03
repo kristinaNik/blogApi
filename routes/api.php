@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::get('/users', 'UserController@index');
-Route::post('login', 'UserController@login');
 
+Route::post('login', 'UserController@login');
+Route::resource('users','UserManagement');
 Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'auth'], function() {
     Route::get('user', 'UserController@userProfile');
 
