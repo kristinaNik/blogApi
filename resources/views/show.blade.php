@@ -13,6 +13,7 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
+            <th scope="col">Role</th>
         </tr>
     </thead>
     <tbody>
@@ -29,14 +30,17 @@
             success:function(data) {
                 var trHTML = '';
                 $.each(data, function (i, item) {
-
                     $.each(item, function (j, user_data) {
+                        if (user_data.role == 0) {
 
+                           trHTML += user_data.role[0] = '';
+                        }
+                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' + user_data.role[0] + '</td></tr>'
 
-                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td></tr>';
                     });
 
                 });
+
                 $('.container #records_table tbody').append(trHTML);
 
             }

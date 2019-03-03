@@ -16,8 +16,7 @@ class UserManagement extends Controller
      */
     public function index(ReadUserManagement $request)
     {
-        $users = User::orderBy('name', 'asc')->get();
-
+        $users =  User::get();
         return UserResource::collection($users);
     }
 
@@ -39,7 +38,7 @@ class UserManagement extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

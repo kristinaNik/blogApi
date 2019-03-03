@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Role;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class User extends JsonResource
@@ -17,7 +18,8 @@ class User extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email
+            'email' => $this->email,
+            'role' => ($this->roles != null) ? $this->roles->pluck('name') : null
         ];
     }
 }
