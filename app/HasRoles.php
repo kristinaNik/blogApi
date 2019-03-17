@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 trait HasRoles
 {
 
@@ -23,9 +24,25 @@ trait HasRoles
      */
     public function assignRole($role)
     {
-        return $this->roles()->save(
-            Role::whereName($role)->firstOrFail()
-        );
+
+        if (is_string($role)) {
+            return app(Role::class)->findByName($role['id']);
+        }
+
+        return $role;
+
+    }
+
+
+
+    protected function getStoredRole($role): Role
+    {
+
+        if (is_string($role)) {
+            return app(Role::class)->findByName($role)->id;
+        }
+
+        return $role;
     }
 
     /**
@@ -53,4 +70,23 @@ trait HasRoles
     {
         return $this->hasRole($permission->roles);
     }
+
+
+    public function syncRoles(array $roles)
+    {
+        $this->roles()->sync($this->getStoredRoleIds($roles));
+    }
+
+    protected function getStoredRoleIds($roles)
+    {
+        $ids = [];
+        foreach ($roles as $role) {
+            $ids[] = $this->assignRole($role);
+        }
+        collect($roles)->each(function ($role) {
+            return $this->assignRole($role);
+        });
+    }
+
+
 }

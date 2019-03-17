@@ -24,12 +24,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('login', 'UserController@login');
-Route::resource('users','UserManagement');
 Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'auth'], function() {
     Route::get('user', 'UserController@userProfile');
 
 
 });
+
+Route::resource('users','UserManagement');
+Route::post('users', 'UserManagement@store');
+
 
 //List all the post
 Route::get('/posts', 'PostController@index');

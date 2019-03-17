@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests\UserManagement;
 
-//use Illuminate\Foundation\Http\FormRequest;
-
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReadUserManagement extends FormRequest
+class StoreUserManagement extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +23,20 @@ class ReadUserManagement extends FormRequest
      */
     public function rules()
     {
-        return [
 
+        return [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'email.required' => 'Email is required!',
+            'name.required' => 'Name is required!',
+            'password.required' => 'Password is required!'
         ];
     }
 }

@@ -3,31 +3,17 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-
+use App\Http\Resources\User as UserResource;
 class UserCollection extends ResourceCollection
 {
     /**
-     * Transform the resource collection into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @param $resource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function toArray($request)
+    public function collect($resource)
     {
-//       return [
-//           'id' => $this->id,
-//           'name' => $this->name,
-//           'email' => $this->email,
-//           'created_at' => $this->created_at,
-//           'updated_at' => $this->updated_at,
-//       ];
-        {
-            return [
-                'data' => $this->collection,
-                'links' => [
-                    'self' => 'link-value',
-                ],
-            ];
-        }
+        return $collects = UserResource::collection($resource);
     }
+
+
 }
