@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\traits\LaratrustUserTrait;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,8 +10,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
+    use LaratrustUserTrait;
     use Notifiable;
-    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -50,8 +51,5 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+
 }

@@ -52,7 +52,7 @@ class UserManagement extends Controller
 
         if ($save) {
             $role = $request->input('role', []);
-            $user->syncRoles($role);
+            $user->attachRole($role);
 
             $user->save();
         }
