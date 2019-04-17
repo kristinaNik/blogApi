@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserManagement\ReadUserManagement;
 use App\Http\Requests\UserManagement\StoreUserManagement;
 use App\Http\Resources\UserCollection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
 use App\User;
@@ -15,6 +16,8 @@ class UserManagement extends Controller
 {
 
     /**
+     * Get all users
+     *
      * @param ReadUserManagement $request
      * @return UserCollection
      */
@@ -23,16 +26,6 @@ class UserManagement extends Controller
         $users =  User::all();
         return new UserCollection($users);
     }
-
-
-    /**
-     *
-     */
-    public function create()
-    {
-        //
-    }
-
 
     /**
      * @param StoreUserManagement $request
@@ -63,25 +56,22 @@ class UserManagement extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display user
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return UserResource
+     * @throws \Exception
      */
-    public function show($id)
+    public function show(ReadUserManagement $request, $id)
     {
-        //
-    }
+        try {
+            $user = User::findOrFail($id);
+            return new UserResource($user);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        } catch (ModelNotFoundException $exception) {
+            throw new ModelNotFoundException();
+        }
+
     }
 
     /**

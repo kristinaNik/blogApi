@@ -48,7 +48,10 @@ class UserController extends Controller
         return $this->respondWithToken($token);
     }
 
-
+    public function logout() {
+        Auth::logout();
+        return response()->json(['success' => true, 'message' => 'Successfully logout'], 200);
+    }
     /**
      * Get the token array structure.
      *

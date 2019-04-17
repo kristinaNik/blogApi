@@ -24,14 +24,13 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('login', 'UserController@login');
-Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'auth'], function() {
+Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('user', 'UserController@userProfile');
 
 
 });
-
+Route::post('logout', 'UserController@logout');
 Route::resource('users','UserManagement');
-Route::post('users', 'UserManagement@store');
 
 
 //List all the post

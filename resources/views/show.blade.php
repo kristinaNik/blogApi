@@ -14,6 +14,7 @@
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Role</th>
+            <th scope="col">Permission</th>
         </tr>
     </thead>
     <tbody>
@@ -31,11 +32,12 @@
                 var trHTML = '';
                 $.each(data, function (i, item) {
                     $.each(item, function (j, user_data) {
-                        if (user_data.role == 0) {
+                        if (user_data.role === 0) {
 
                            trHTML += user_data.role[0] = '';
                         }
-                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' + user_data.role + '</td></tr>'
+                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
+                            user_data.role + '</td><td>' + user_data.permission +'</td></tr>'
 
                     });
 

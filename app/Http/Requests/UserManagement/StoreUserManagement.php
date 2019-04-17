@@ -27,7 +27,9 @@ class StoreUserManagement extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required'
+            'password' => 'required',
+            'role' => 'required|exists:roles,id',
+            'permissions' => 'exists:permissions,id'
         ];
     }
 
