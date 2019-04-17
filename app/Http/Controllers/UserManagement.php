@@ -52,8 +52,10 @@ class UserManagement extends Controller
 
         if ($save) {
             $role = $request->input('role', []);
-            $user->roles()->attach($role);
+            $permissions = $request->input('permissions', []);
 
+            $user->roles()->attach($role);
+            $user->attachPermissions($permissions);
             $user->save();
         }
 
