@@ -35,7 +35,7 @@
 
                            trHTML += user_data.role[0] = '';
                         }
-                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' + user_data.role[0] + '</td></tr>'
+                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' + user_data.role + '</td></tr>'
 
                     });
 

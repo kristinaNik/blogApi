@@ -15,11 +15,11 @@ namespace App\Http\traits;
  * @license MIT
  * @package Laratrust
  */
-use Laratrust\Helper;
+
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+
 trait LaratrustUserTrait
 {
     use LaratrustHasEvents;
