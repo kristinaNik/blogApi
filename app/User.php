@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Http\traits\LaratrustUserTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +14,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use EntrustUserTrait;
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

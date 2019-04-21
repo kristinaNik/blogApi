@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserManagement\DeleteUserManagement;
 use App\Http\Requests\UserManagement\ReadUserManagement;
 use App\Http\Requests\UserManagement\StoreUserManagement;
+use App\Http\Requests\UserManagement\UpdateUserManagement;
 use App\Http\Resources\UserCollection;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
@@ -23,7 +26,7 @@ class UserManagement extends Controller
      */
     public function index(ReadUserManagement $request)
     {
-        $users =  User::all();
+        $users =  User::paginate(15);
         return new UserCollection($users);
     }
 
@@ -55,12 +58,14 @@ class UserManagement extends Controller
         return new UserResource($user);
     }
 
+
+
     /**
      * Display user
      *
+     * @param ReadUserManagement $request
      * @param $id
      * @return UserResource
-     * @throws \Exception
      */
     public function show(ReadUserManagement $request, $id)
     {
@@ -77,23 +82,55 @@ class UserManagement extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return UserResource
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserManagement $request, $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+
+            if (!empty($request->input('password'))) {
+                $user->password = Hash::make($request->input('password'));
+            }
+            $save = $user->save();
+
+            if ($save) {
+                $role = $request->input('role');
+                $permissions = $request->input('permissions', []);
+
+                $user->roles()->sync($role);
+                $user->permissions()->sync($permissions);
+                $user->save();
+            }
+
+            return new UserResource($user);
+        } catch (ModelNotFoundException $exception) {
+            throw new ModelNotFoundException();
+        }
+
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete a user
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param DeleteUserManagement $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(DeleteUserManagement $request, $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return response()->json(['success' => ['message' => "User deleted successfully"]]);
+        }catch (ModelNotFoundException $exception) {
+            throw new ModelNotFoundException();
+        }
     }
 }
