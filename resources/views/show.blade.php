@@ -19,6 +19,17 @@
     </thead>
     <tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+
+
 </div>
 
 
@@ -30,16 +41,17 @@
             url:"{{ url('api/users') }}",
             success:function(data) {
                 var trHTML = '';
+
                 $.each(data, function (i, item) {
-                    $.each(item, function (j, user_data) {
-                        if (user_data.role === 0) {
-
-                           trHTML += user_data.role[0] = '';
-                        }
-                        trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
-                            user_data.role + '</td><td>' + user_data.permission +'</td></tr>'
-
-                    });
+                    var counter = 1;
+                        $.each(item, function (j, user_data) {
+                            dataNum = item.length;
+                            if (counter <= dataNum) {
+                                trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
+                                    user_data.role + '</td><td>' + user_data.permission + '</td></tr>';
+                            }
+                            counter++;
+                        });
 
                 });
 
@@ -47,7 +59,59 @@
 
             }
         });
+
+
+        $('body').on('click', '.pagination a', function(e) {
+
+            e.preventDefault();
+
+            $('#load a').css('color', '#dfecf6');
+            $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
+
+            $.ajax({
+                type:'GET',
+                url:"{{ url('api/users') }}",
+                success:function(data) {
+                    url = getArticles(data.links.next);
+                    window.history.pushState("", "", url);
+
+                }
+            });
+            // url = getArticles();
+            // window.history.pushState("", "", url);
+
+        });
+
+        function getArticles(url) {
+            $.ajax({
+                type : 'GET',
+                url:"http://localhost:8000/api/users?page=2",
+            }).done(function (data) {
+                var trHTML = '';
+
+                $.each(data, function (i, item) {
+                    var counter = 1;
+                    $.each(item, function (j, user_data) {
+                        dataNum = item.length;
+                        if (counter <= dataNum) {
+                            trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
+                                user_data.role + '</td><td>' + user_data.permission + '</td></tr>';
+                        }
+                        counter++;
+                    });
+
+                    $('.container #records_table tbody').append(trHTML);
+                });
+
+
+            }).fail(function () {
+                alert('Users could;t be loaded');
+            });
+        }
     });
+
+
+
 
 </script>
 
