@@ -18,3 +18,4 @@ Route::get('/', function () {
     return view('show');
 });
 
+Route::get('/search', 'UserManagement@index')->name('search.action');

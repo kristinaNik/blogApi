@@ -1,12 +1,41 @@
 <html>
 <head>
-    <link href="{{ asset('css/app.css') }}" media="all" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title')</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    {{--<link rel="stylesheet" href="{{URL::to('src/css/app.css')}}">--}}
+    @yield('styles')
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
     </script>
 </head>
 <body>
-<div class="container">
 
+
+<div class="container">
+    <div class="filters">
+        <h2>Users </h2>
+        <form>
+            <div class="form-group">
+
+                <div class="form-group">
+
+                    <label>Search users</label>
+                    <input type="text" id="search" name="search" class="form-control" placeholder="Search by name or email">
+                </div>
+
+
+
+
+                <button type="submit" id="search_users" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+    </div>
     <table class="table" id="records_table">
     <thead>
         <tr>
@@ -18,102 +47,12 @@
         </tr>
     </thead>
     <tbody>
-    </table>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
 
+    </tbody>
+    </table>
 
 </div>
-
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $.ajax({
-            type:'GET',
-            url:"{{ url('api/users') }}",
-            success:function(data) {
-                var trHTML = '';
-
-                $.each(data, function (i, item) {
-                    var counter = 1;
-                        $.each(item, function (j, user_data) {
-                            dataNum = item.length;
-                            if (counter <= dataNum) {
-                                trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
-                                    user_data.role + '</td><td>' + user_data.permission + '</td></tr>';
-                            }
-                            counter++;
-                        });
-
-                });
-
-                $('.container #records_table tbody').append(trHTML);
-
-            }
-        });
-
-
-        $('body').on('click', '.pagination a', function(e) {
-
-            e.preventDefault();
-
-            $('#load a').css('color', '#dfecf6');
-            $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
-
-            $.ajax({
-                type:'GET',
-                url:"{{ url('api/users') }}",
-                success:function(data) {
-                    url = getArticles(data.links.next);
-                    window.history.pushState("", "", url);
-
-                }
-            });
-            // url = getArticles();
-            // window.history.pushState("", "", url);
-
-        });
-
-        function getArticles(url) {
-            $.ajax({
-                type : 'GET',
-                url:"http://localhost:8000/api/users?page=2",
-            }).done(function (data) {
-                var trHTML = '';
-
-                $.each(data, function (i, item) {
-                    var counter = 1;
-                    $.each(item, function (j, user_data) {
-                        dataNum = item.length;
-                        if (counter <= dataNum) {
-                            trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
-                                user_data.role + '</td><td>' + user_data.permission + '</td></tr>';
-                        }
-                        counter++;
-                    });
-
-                    $('.container #records_table tbody').append(trHTML);
-                });
-
-
-            }).fail(function () {
-                alert('Users could;t be loaded');
-            });
-        }
-    });
-
-
-
-
-</script>
-
 </body>
+
+<script src="js/get_users.js"></script>
 </html>

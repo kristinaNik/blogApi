@@ -7,13 +7,12 @@ use App\Http\Requests\UserManagement\ReadUserManagement;
 use App\Http\Requests\UserManagement\StoreUserManagement;
 use App\Http\Requests\UserManagement\UpdateUserManagement;
 use App\Http\Resources\UserCollection;
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
 use App\User;
 use Illuminate\Support\Facades\Hash;
-use Validator;
+
 
 class UserManagement extends Controller
 {
@@ -26,8 +25,22 @@ class UserManagement extends Controller
      */
     public function index(ReadUserManagement $request)
     {
-        $users =  User::paginate(15);
-        return new UserCollection($users);
+        if ($request->ajax()) {
+            $query = $request->get('query');
+
+            if ($query != '') {
+                $data = User::userSearch($query);
+            } else {
+                $data = User::getUsers();
+
+            }
+
+            $totalRows = $data->count();
+            if ($totalRows > 0) {
+
+                return UserResource::collection($data, $totalRows);
+            }
+        }
     }
 
     /**
