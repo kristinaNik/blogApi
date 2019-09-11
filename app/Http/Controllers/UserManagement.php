@@ -25,25 +25,26 @@ class UserManagement extends Controller
      */
     public function index(ReadUserManagement $request)
     {
-        if ($request->ajax()) {
-            $query = $request->get('query');
 
-            if ($query != '') {
-                $data = User::userSearch($query);
-            } else {
-                $data = User::getUsers();
+        $query = $request->get('query');
 
-            }
+        if ($query != '') {
+            $data = User::userSearch($query);
+        } else {
+            $data = User::getUsers();
 
-            $totalRows = $data->count();
-            if ($totalRows > 0) {
+        }
 
-                return UserResource::collection($data, $totalRows);
-            }
+        $totalRows = $data->count();
+        if ($totalRows > 0) {
+
+            return UserResource::collection($data, $totalRows);
         }
     }
 
     /**
+     * Create new user
+     *
      * @param StoreUserManagement $request
      * @return UserResource
      */

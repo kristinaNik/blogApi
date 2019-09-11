@@ -18,7 +18,6 @@ class PostController extends Controller
     {
         $posts = Post::paginate(15);
 
-        //return the collection as resource
         return PostResource::collection($posts);
     }
 
@@ -95,7 +94,7 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified post from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
