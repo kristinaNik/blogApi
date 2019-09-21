@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('show');
-});
+})->name('users.home');
+
 
 Route::get('/search', 'UserManagement@index')->name('search.action');
+
+Route::get('/add', function () {
+    return view('add_users');
+})->name('users.add');
+
+//Route::get('/add')->name('users.add');

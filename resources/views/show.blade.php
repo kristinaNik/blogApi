@@ -1,21 +1,9 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title')</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    {{--<link rel="stylesheet" href="{{URL::to('src/css/app.css')}}">--}}
-    @yield('styles')
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-    </script>
-</head>
-<body>
+@extends('layouts/master')
 
-
+@section('title')
+    User Management
+@endsection
+@section('content')
 <div class="container">
     <div class="filters">
         <h2>Users </h2>
@@ -29,9 +17,8 @@
                 </div>
 
 
-
-
-                <button type="submit" id="search_users" class="btn btn-primary">Search</button>
+                <button id="search_users" class="btn btn-primary">Search</button>
+                <a href="{{route('users.add')}}"><input type="button" id="add_users" class="btn btn-success" value="Add users"></a>
             </div>
         </form>
 
@@ -52,7 +39,8 @@
     </table>
 
 </div>
-</body>
 
 <script src="js/get_users.js"></script>
-</html>
+
+
+@endsection

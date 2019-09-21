@@ -7,9 +7,13 @@ use App\Http\Requests\UserManagement\ReadUserManagement;
 use App\Http\Requests\UserManagement\StoreUserManagement;
 use App\Http\Requests\UserManagement\UpdateUserManagement;
 use App\Http\Resources\UserCollection;
+use App\Permission;
+use App\Role;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
+use App\Http\Resources\Role as RoleResource;
+use App\Http\Resources\Permission as PermissionResource;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -127,6 +131,23 @@ class UserManagement extends Controller
             throw new ModelNotFoundException();
         }
 
+    }
+
+    /**
+     * Get Roles
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getRoles() {
+        $roles = Role::all();
+
+        return RoleResource::collection($roles);
+    }
+
+    public function getPermissions() {
+        $permissions = Permission::all();
+
+        return PermissionResource::collection($permissions);
     }
 
     /**

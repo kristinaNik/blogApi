@@ -31,7 +31,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 });
 Route::post('logout', 'UserController@logout');
 Route::resource('users','UserManagement');
-
+Route::get('/roles', 'UserManagement@getRoles');
+Route::get('/permissions', 'UserManagement@getPermissions');
 
 //List all the post
 Route::get('/posts', 'PostController@index');
