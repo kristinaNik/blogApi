@@ -15,6 +15,8 @@ $("#add_users").on('click', function(e) {
         var permission = elementPermission.value;
         addPermissions.push(permission);
 
+        console.log(addPermissions);
+
         $.ajax({
             type: 'POST',
             url: "api/users",

@@ -8,6 +8,7 @@ use App\Http\Requests\UserManagement\StoreUserManagement;
 use App\Http\Requests\UserManagement\UpdateUserManagement;
 use App\Http\Resources\UserCollection;
 use App\Permission;
+use App\Repositories\UserRepository;
 use App\Role;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -20,12 +21,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserManagement extends Controller
 {
-
     /**
      * Get all users
      *
      * @param ReadUserManagement $request
-     * @return UserCollection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(ReadUserManagement $request)
     {
@@ -46,46 +46,27 @@ class UserManagement extends Controller
         }
     }
 
+
     /**
-     * Create new user
+     * Store new user
      *
      * @param StoreUserManagement $request
+     * @param UserRepository $userRepository
      * @return UserResource
      */
-    public function store(StoreUserManagement $request)
+    public function store(StoreUserManagement $request, UserRepository $userRepository)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $password =  $request->password;
-        if (!empty($password)) {
-            $user->password = Hash::make($password);
-        }
-        $user->remember_token = null;
-        $save = $user->save();
-
-        if ($save) {
-            $role = $request->input('role', []);
-            $permissions = $request->input('permissions', []);
-
-            $user->roles()->attach($role);
-            $user->attachPermissions($permissions);
-            $user->save();
-        }
+        $user = $userRepository->store($request);
 
         return new UserResource($user);
     }
 
 
-
     /**
-     * Display user
-     *
-     * @param ReadUserManagement $request
      * @param $id
      * @return UserResource
      */
-    public function show(ReadUserManagement $request, $id)
+    public function show($id)
     {
         try {
             $user = User::findOrFail($id);
@@ -97,34 +78,19 @@ class UserManagement extends Controller
 
     }
 
+
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
-     * @param Request $request
+     * @param UpdateUserManagement $request
+     * @param UserRepository $userRepository
      * @param $id
      * @return UserResource
      */
-    public function update(UpdateUserManagement $request, $id)
+    public function update(UpdateUserManagement $request, UserRepository $userRepository, $id)
     {
         try {
-            $user = User::findOrFail($id);
-
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-
-            if (!empty($request->input('password'))) {
-                $user->password = Hash::make($request->input('password'));
-            }
-            $save = $user->save();
-
-            if ($save) {
-                $role = $request->input('role');
-                $permissions = $request->input('permissions', []);
-
-                $user->roles()->sync($role);
-                $user->permissions()->sync($permissions);
-                $user->save();
-            }
+            $user = $userRepository->update($request, $id);
 
             return new UserResource($user);
         } catch (ModelNotFoundException $exception) {
