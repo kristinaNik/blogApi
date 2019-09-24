@@ -8,11 +8,46 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\UserRepositoryInterface;
 use App\User;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
 
+
+    /**
+     * @param $searchParam
+     * @return mixed
+     */
+    public function searchUsers($searchParam)
+    {
+       return User::where('name', 'LIKE', '%' . $searchParam . '%')
+            ->orWhere('email', 'LIKE', '%' . $searchParam . '%')
+            ->get();
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsers()
+    {
+       return User::orderBy('id', 'desc')->get();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function show($id)
+    {
+        return User::findOrFail($id);
+    }
+
+    /**
+     * @param $userData
+     * @return User
+     */
     public function store($userData)
     {
         $user = new User();
@@ -37,7 +72,11 @@ class UserRepository
 
     }
 
-
+    /**
+     * @param $userData
+     * @param $id
+     * @return mixed
+     */
     public function update($userData, $id)
     {
         $user = User::findOrFail($id);
@@ -58,6 +97,18 @@ class UserRepository
             $user->permissions()->sync($permissions);
             $user->save();
         }
+
+        return $user;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
 
         return $user;
     }

@@ -2,40 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserManagement\DeleteUserManagement;
 use App\Http\Requests\UserManagement\ReadUserManagement;
 use App\Http\Requests\UserManagement\StoreUserManagement;
 use App\Http\Requests\UserManagement\UpdateUserManagement;
-use App\Http\Resources\UserCollection;
 use App\Permission;
 use App\Repositories\UserRepository;
 use App\Role;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\Role as RoleResource;
 use App\Http\Resources\Permission as PermissionResource;
-use App\User;
-use Illuminate\Support\Facades\Hash;
-
 
 class UserManagement extends Controller
 {
     /**
-     * Get all users
-     *
      * @param ReadUserManagement $request
+     * @param UserRepository $user
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(ReadUserManagement $request)
+    public function index(ReadUserManagement $request, UserRepository $user)
     {
 
         $query = $request->get('query');
 
         if ($query != '') {
-            $data = User::userSearch($query);
+            $data = $user->searchUsers($query);
         } else {
-            $data = User::getUsers();
+            $data = $user->getUsers();
 
         }
 
@@ -61,15 +54,15 @@ class UserManagement extends Controller
         return new UserResource($user);
     }
 
-
     /**
+     * @param UserRepository $userRepository
      * @param $id
      * @return UserResource
      */
-    public function show($id)
+    public function show(UserRepository $userRepository, $id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = $userRepository->show($id);
             return new UserResource($user);
 
         } catch (ModelNotFoundException $exception) {
@@ -110,6 +103,11 @@ class UserManagement extends Controller
         return RoleResource::collection($roles);
     }
 
+    /**
+     * Get Permissions
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function getPermissions() {
         $permissions = Permission::all();
 
@@ -117,19 +115,15 @@ class UserManagement extends Controller
     }
 
     /**
-     * Soft delete a user
-     *
-     * @param DeleteUserManagement $request
+     * @param UserRepository $userRepository
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(DeleteUserManagement $request, $id)
+    public function destroy(UserRepository $userRepository, $id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->delete();
-
-            return response()->json(['success' => ['message' => "User deleted successfully"]]);
+            $user = $userRepository->destroy($id);
+            return response()->json(['success' => ['message' => "User deleted successfully", 'user' => $user]]);
         }catch (ModelNotFoundException $exception) {
             throw new ModelNotFoundException();
         }

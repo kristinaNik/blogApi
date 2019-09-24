@@ -25,4 +25,6 @@ Route::get('/add', function () {
     return view('add_users');
 })->name('users.add');
 
-//Route::get('/add')->name('users.add');
+Route::get('/edit/{id}', function () {
+    return view('edit_users');
+})->name('users.edit');

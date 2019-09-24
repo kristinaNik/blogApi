@@ -54,30 +54,4 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    /**
-     * Search user by name or email
-     *
-     * @param $query
-     * @param $searchParam
-     */
-    public function scopeUserSearch($query, $searchParam) {
-        if (empty($searchParam)) {
-            return;
-        }
-
-        return $query->where('name', 'LIKE', '%' . $searchParam . '%')
-                    ->orWhere('email', 'LIKE', '%' . $searchParam . '%')
-            ->get();
-    }
-
-    /**
-     * Get all users
-     *
-     * @param $query
-     * @return mixed
-     */
-    public function scopeGetUsers($query) {
-
-        return $query->orderBy('id', 'desc')->get();
-    }
 }

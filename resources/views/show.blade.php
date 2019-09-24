@@ -17,7 +17,7 @@
                 </div>
 
 
-                <button id="search_users" class="btn btn-primary">Search</button>
+                <button id="search_users" class="btn btn-default">Search</button>
                 <a href="{{route('users.add')}}"><input type="button" id="add_users" class="btn btn-success" value="Add users"></a>
             </div>
         </form>
@@ -33,10 +33,12 @@
             <th scope="col">Permission</th>
         </tr>
     </thead>
+        <p><b>Size: </b> <span id="size"></span></p>
     <tbody>
 
     </tbody>
     </table>
+
 
 </div>
 
