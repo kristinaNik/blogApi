@@ -15,8 +15,6 @@ $("#add_users").on('click', function(e) {
         var permission = elementPermission.value;
         addPermissions.push(permission);
 
-        console.log(addPermissions);
-
         $.ajax({
             type: 'POST',
             url: "api/users",
@@ -28,14 +26,14 @@ $("#add_users").on('click', function(e) {
                 permissions: addPermissions
             },
             success: function (data) {
-
-              alert('Successfuly created user')
-            }
+              $('#success_message').append("Successfully created a user");
+             // $( location ).attr("href", "/");
+            },
+            error: function (data, err) {
+                alert("error in updating the user.");
+            },
         });
         });
     });
     })
-  //  var token = document.getElementsByName('_token')[0].value;
-
-
 });

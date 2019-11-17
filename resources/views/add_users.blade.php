@@ -37,16 +37,14 @@
                 <label>User permission</label>
                 <select class="form-control js-example-basic-multiple" id="user_permissions" multiple="multiple">
 
-
-
                 </select>
             </div>
-
 
                 <button type="submit" id="add_users" class="btn btn-primary">Save User</button>
                 <a href="{{route('users.home')}}"><input type="button"  class="btn btn-default" value="Go Home"></a>
         </form>
-
+        <br/>
+        <p class="text-success" id="success_message"></p>
     </div>
     <script>
         $(document).ready(function() {

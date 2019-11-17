@@ -25,6 +25,8 @@ Route::get('/add', function () {
     return view('add_users');
 })->name('users.add');
 
-Route::get('/edit/{id}', function () {
-    return view('edit_users');
-})->name('users.edit');
+//Route::get('/edit/{id}', function () {
+//    return view('edit_users');
+//})->name('users.edit');
+Route::get('/{id}', 'UserManagement@edit')->name('users.edit');
+//Route::put('/{id}', 'UserManagement@update')->name('users.update');

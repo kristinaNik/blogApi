@@ -80,11 +80,11 @@ class UserManagement extends Controller
      * @param $id
      * @return UserResource
      */
-    public function update(UpdateUserManagement $request, UserRepository $userRepository, $id)
+    public function update(UpdateUserManagement $request, $id, UserRepository $userRepository)
     {
         try {
-            $user = $userRepository->update($request, $id);
 
+            $user = $userRepository->update($request, $id);
             return new UserResource($user);
         } catch (ModelNotFoundException $exception) {
             throw new ModelNotFoundException();
@@ -125,6 +125,25 @@ class UserManagement extends Controller
             $user = $userRepository->destroy($id);
             return response()->json(['success' => ['message' => "User deleted successfully", 'user' => $user]]);
         }catch (ModelNotFoundException $exception) {
+            throw new ModelNotFoundException();
+        }
+    }
+
+    public function edit(UserRepository $userRepository, $id)
+    {
+        try {
+            $user = $userRepository->show($id);
+
+            $roles = Role::all();
+            $permissions = Permission::all();
+            $roleName = $user->roles->pluck('name')[0];
+            $roleNameId = $user->roles->pluck('id')[0];
+            $allRoles = $roles->where('name', '!=', $roleName)->pluck('name', 'id');
+            $permissionNames = $permissions->pluck('name', 'id');
+
+            return view('edit_users')->with(['user'=> $user, 'roleNameId' => $roleNameId, 'roleName' => $roleName, 'allRoles' => $allRoles, 'permissionNames'=> $permissionNames]);
+
+        } catch (ModelNotFoundException $exception) {
             throw new ModelNotFoundException();
         }
     }
