@@ -8,6 +8,7 @@ use App\Http\Requests\UserManagement\UpdateUserManagement;
 use App\Permission;
 use App\Repositories\UserRepository;
 use App\Role;
+use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\Role as RoleResource;
@@ -122,8 +123,8 @@ class UserManagement extends Controller
     public function destroy(UserRepository $userRepository, $id)
     {
         try {
-            $user = $userRepository->destroy($id);
-            return response()->json(['success' => ['message' => "User deleted successfully", 'user' => $user]]);
+            $userRepository->destroy($id);
+            return redirect()->route('users.home');
         }catch (ModelNotFoundException $exception) {
             throw new ModelNotFoundException();
         }
@@ -133,7 +134,6 @@ class UserManagement extends Controller
     {
         try {
             $user = $userRepository->show($id);
-
             $roles = Role::all();
             $permissions = Permission::all();
             $roleName = $user->roles->pluck('name')[0];

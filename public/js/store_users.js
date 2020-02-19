@@ -30,7 +30,7 @@ $("#add_users").on('click', function(e) {
              // $( location ).attr("href", "/");
             },
             error: function (data, err) {
-                alert("error in updating the user.");
+                alert("error in creating the user.");
             },
         });
         });

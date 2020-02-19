@@ -18,7 +18,7 @@ $(document).ready(function () {
                         trHTML += '<tr><td>' + user_data.id + '</td><td>' + user_data.name + '</td><td>' + user_data.email + '</td><td>' +
                             user_data.role + '</td><td>' + user_data.permission +
                             '</td><td><a href="/' + user_data.id +'"><button class="edit-modal btn btn-info"><span class=\'glyphicon glyphicon-edit\'></span> Edit </button></a></td>' +
-                            '</td><td><input type="button" class="btn btn-danger" id="delete_user"  value="Delete User"></td>' +
+                            '</td><td><a href="/delete/' + user_data.id +'"><button class="edit-modal btn btn-danger"><span class=\'glyphicon glyphicon-edit\'></span> Delete user </button></a></td>' +
                             '</td></tr>';
 
                     });

@@ -41,7 +41,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function show($id)
     {
-        return User::findOrFail($id);
+        return User::with('roles')->findOrFail($id);
     }
 
     /**
